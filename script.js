@@ -32,9 +32,8 @@ function changeTextColor() {
 
 // Fonctionnalité 4
 
-const cards = document.querySelectorAll('.card');
-
-const secondCard = cards[1];
+const exo04card = document.querySelectorAll('.card');
+const secondCard = exo04card[1];//pourrait être écrit [1] fin ligne 35 en renommant exo04card => secondCard
 
 let secondCardText = secondCard.querySelector('.card-text');
 
@@ -69,36 +68,47 @@ function nuke(){
 
 // Fonctionnalité 6
 
-let exo06cards = document.querySelectorAll('.card')[0];
+// Sélectionner toutes les cartes
+const cards = document.querySelectorAll('.card');
 
-const buttonSuccess = exo06cards.querySelector('.btn-success');
-const imgCard = exo06cards.querySelector('.card-img-top');
-const textCard = exo06cards.querySelector('.card-text');
+// Créer un objet pour stocker l'état de chaque carte
+const cardStates = {};
 
-buttonSuccess.addEventListener("mouseenter",reduce);
-buttonSuccess.addEventListener("mouseleave",backBasic);
+// Parcourir chaque carte
+cards.forEach((card, index) => {
+    // Initialiser l'état de chaque carte
+    cardStates[index] = {
+        isReduced: false // Indique si la carte est réduite
+    };
 
-function reduce (){
-  console.log("L'événement mouseenter a été déclenché !");
-  imgCard.style.width = '20%';
-};
+    const buttonSuccess = card.querySelector('.btn-success');
+    const cardImage = card.querySelector('.card-img-top');
+    const cardText = card.querySelector('.card-text');
 
-function backBasic (){
-  console.log("L'événement mouseenter a été déclenché !");
-  imgCard.style.width = '100%';
-};
+    // Ajouter un événement "mouseenter" au bouton "View"
+    buttonSuccess.addEventListener('mouseenter', () => {
+        // Vérifier l'état actuel et effectuer un toggle
+        if (!cardStates[index].isReduced) {
+            console.log(`Réduction de la carte ${index}`);
+            cardImage.style.width = "20%"; // Réduire l'image
+            cardImage.style.transition = "width 0.5s ease"; // Ajouter une transition
+            cardText.style.display = "none"; // Masquer le texte
+            cardStates[index].isReduced = true; // Marquer la carte comme réduite
+        } else {
+            console.log(`Restauration de la carte ${index}`);
+            cardImage.style.width = "100%"; // Restaurer l'image
+            cardText.style.display = "block"; // Réafficher le texte
+            cardStates[index].isReduced = false; // Marquer la carte comme restaurée
+        }
+    });
+});
 
+// Fonctionnalité 7
 
+const carousselCards = document.querySelectorAll('.card');
 
+// Allez on va rajouter un peu de WTF dans la page : si un utilisateur clique sur le bouton gris ==>, la dernière card (en bas à droite) va passer en premier (en haut à gauche). On va pouvoir faire tourner les cards !
 
+// Indice : Cette fonctionnalité n'est pas ultra complexe en fait : il faut pointer sur le noeud-parent des 6 cards puis déplacer la card n°6 en premier avec un insertBefore.
 
-
-// T'as déjà implémenté 5 fonctionnalités d'interaction ! C'est top ! On va commencer à corser les choses.
-
-// La fonctionnalité sera la suivante : si un utilisateur passe sa souris sur le bouton "View" d'une card (n'importe laquelle), celle-ci va se réduire. Cela veut dire que le texte disparaît, l'image n'apparaîtra qu'à 20 % de sa taille d'origine et les boutons "Edit" / "View" restent visibles. Cette fonction sera réversible : s'il repasse sa souris, la card redevient normale !
-
-// Indice 1 : Commence par implémenter cette fonctionnalité sur une card avant d'essayer de les faire toutes.
-
-// Indice 2 : Tu vas devoir appliquer les leçons apprises sur la fonctionnalité 2 (toggle de la classe "collapse") et sur la fonctionnalité 3 (toggle sur le style appliqué à l'image : tantôt on lui rajoute "width: 20 %;", tantôt on lui enlève).
-
-// Indice 3 : Une fois que ça marche sur une card, fait une boucle for sur la liste des 6 cards (a priori tu as extrait la card d'une liste d'éléments HTML non?) pour appliquer un addEventListener à chacune. /!\ mets bien le compteur de ta boucle en "let", sinon tu vas avoir des surprises… => clique ici pour accéder à une ressource qui parle de ça.
+// Petite remarque : tu vas réaliser que si tu mélanges les cards, il est fort probable que la fonctionnalité 6 va se mettre à faire n'importe quoi. Si tu survoles un bouton "View", c'est une autre card qui va se réduire. Si tu arrives à corriger ça, c'est cool mais la consigne est d'ignorer ce souci pour le moment.
