@@ -105,10 +105,95 @@ cards.forEach((card, index) => {
 
 // Fonctionnalité 7
 
-const carousselCards = document.querySelectorAll('.card');
+// DOMContentLoaded est un événement qui se déclenche lorsque le document HTML initial a été complètement chargé et analysé, sans attendre que les feuilles de style, les images et les sous-frames aient fini de charger.
 
-// Allez on va rajouter un peu de WTF dans la page : si un utilisateur clique sur le bouton gris ==>, la dernière card (en bas à droite) va passer en premier (en haut à gauche). On va pouvoir faire tourner les cards !
+// Attendre que le document soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+  // Sélectionner le bouton de rotation
+  const nextButton = document.querySelector('.btn-secondary');
 
-// Indice : Cette fonctionnalité n'est pas ultra complexe en fait : il faut pointer sur le noeud-parent des 6 cards puis déplacer la card n°6 en premier avec un insertBefore.
+  // Sélectionner le conteneur parent des cards
+  const cardContainer1 = document.querySelector('.album .container .row');
 
-// Petite remarque : tu vas réaliser que si tu mélanges les cards, il est fort probable que la fonctionnalité 6 va se mettre à faire n'importe quoi. Si tu survoles un bouton "View", c'est une autre card qui va se réduire. Si tu arrives à corriger ça, c'est cool mais la consigne est d'ignorer ce souci pour le moment.
+  // Définir la fonction de rotation
+  function RotateCardsNext() {
+      // Sélectionner toutes les cards
+      const cards = cardContainer1.querySelectorAll('.col-md-4');
+      
+      // Vérifier s'il y a au moins une card
+      if (cards.length > 0) {
+          // Sélectionner la dernière card
+          const lastCard = cards[cards.length - 1];
+          
+          // Déplacer la dernière card au début du conteneur
+          cardContainer1.insertBefore(lastCard, cards[0]);
+      }
+  }
+
+  // Ajouter l'écouteur d'événement au bouton
+  nextButton.addEventListener('click', RotateCardsNext);
+});
+
+//Fonctionnalité 8
+
+// Attendre que le document soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+  // Sélectionner le bouton bleu (flèche <==)
+  const rotateBackwardButton = document.querySelector('.btn-primary');
+  // Sélectionner le conteneur parent des cards
+  const cardContainer = document.querySelector('.album .container .row');
+
+  // Fonction pour faire tourner les cards vers l'arrière
+  function rotateCardsBackward(event) {
+      event.preventDefault(); // Empêche le comportement par défaut du lien
+      
+      // Sélectionner toutes les cards dans le conteneur
+      const cards = cardContainer.querySelectorAll('.col-md-4');
+      
+      // Vérifier s'il y a au moins une card
+      if (cards.length > 0) {
+          // Sélectionner la première card
+          const firstCard = cards[0];
+          // Déplacer la première card à la fin du conteneur
+          cardContainer.appendChild(firstCard);
+      }
+  }
+
+  // Ajouter l'écouteur d'événement 'click' au bouton bleu
+  rotateBackwardButton.addEventListener('click', rotateCardsBackward);
+});
+
+//Fonctionnalité 9
+
+// Attendre que le document soit chargé
+document.addEventListener('DOMContentLoaded', () => {
+  // Sélectionner le logo ou l'élément contenant "JS & Events"
+  const logo = document.querySelector('.navbar-brand');
+  
+  // Ajouter un écouteur d'événement 'keypress' à l'élément logo
+  logo.addEventListener('keypress', (event) => {
+      // Retirer toutes les classes du body pour éviter les accumulations
+      document.body.className = '';
+
+      switch (event.key) {
+          case 'a':
+              // Condenser à gauche
+              document.body.classList.add('col-4', 'offset-md-0');
+              break;
+          case 'z':
+              // Condenser au centre
+              document.body.classList.add('col-4', 'offset-md-4');
+              break;
+          case 'e':
+              // Condenser à droite
+              document.body.classList.add('col-4', 'offset-md-8');
+              break;
+          case 'r':
+              // Rétablir la mise en page normale
+              document.body.classList.remove('col-4', 'offset-md-0', 'offset-md-4', 'offset-md-8');
+              break;
+          default:
+              break;
+      }
+  });
+});
